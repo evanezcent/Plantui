@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:plantui/components/screens/home/components/header_searchbox.dart';
+import 'package:plantui/components/screens/home/components/title_underlined.dart';
 import 'package:plantui/constants.dart';
 
 class Body extends StatelessWidget {
@@ -9,106 +12,161 @@ class Body extends StatelessWidget {
 
     // Enable scroll on small device
     return SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-          HeaderWithSearchBar(size: size)
+      child: Column(
+        children: <Widget>[
+          HeaderWithSearchBar(size: size),
+          ButtonMore(
+            title: "Recomended",
+            hitButton: () {},
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+              child: Row(
+              children: <Widget>[
+                CustomCard(
+                  img: "assets/images/image_3.png",
+                  title: "Flamboyan",
+                  country: "Bandung",
+                  price: 70.5,
+                  pressCard: (){},
+                ),
+                CustomCard(
+                  img: "assets/images/image_1.png",
+                  title: "Tulip",
+                  country: "Medan",
+                  price: 99.9,
+                  pressCard: (){},
+                ),
+                CustomCard(
+                  img: "assets/images/image_2.png",
+                  title: "Jemani",
+                  country: "Surabaya",
+                  price: 100.2,
+                  pressCard: (){},
+                ),
+                CustomCard(
+                  img: "assets/images/image_3.png",
+                  title: "Anggrek",
+                  country: "Bandung",
+                  price: 249,
+                  pressCard: (){},
+                ),
+                CustomCard(
+                  img: "assets/images/image_1.png",
+                  title: "Kasturi",
+                  country: "Makassar",
+                  price: 109.9,
+                  pressCard: (){},
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 }
 
-class HeaderWithSearchBar extends StatelessWidget {
-  const HeaderWithSearchBar({
+class CustomCard extends StatelessWidget {
+  const CustomCard({
     Key key,
-    @required this.size,
+    this.img,
+    this.title,
+    this.country,
+    this.price,
+    this.pressCard,
   }) : super(key: key);
 
-  final Size size;
+  final String img, title, country;
+  final double price;
+  final Function pressCard;
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.only(bottom: defaultPadding * 4),
-      // Make a header
-      height: size.height * 0.2, // Header with height 20% of device
-      child: Stack(
+      margin: EdgeInsets.only(
+          left: defaultPadding,
+          bottom: defaultPadding,
+          top: defaultPadding / 2),
+      width: size.width * 0.4,
+      child: Column(
         children: <Widget>[
-          // Make top Header
-          Container(
-            height: size.height * 0.2 -27,
-            decoration: BoxDecoration(
-              color: colorPrimary,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(36),
-                bottomRight: Radius.circular(36),
-              )
-            ),
+          Image.asset(img),
+          // Box for title card
+          GestureDetector(
+            onTap: pressCard,
             child: Container(
-              margin: EdgeInsets.only(bottom: 10 + defaultPadding),
+              padding: EdgeInsets.all(defaultPadding / 2),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(0, 10),
+                        spreadRadius: -5,
+                        blurRadius: 10,
+                        color: colorPrimary)
+                  ]),
               child: Row(
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(left: 20),
-                    child: Text(
-                      "Hello Tama!",
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white
-                      ),
-                    ),
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: "$title\n".toUpperCase(),
+                          style: Theme.of(context).textTheme.button),
+                      TextSpan(
+                          text: "$country".toUpperCase(),
+                          style:
+                              TextStyle(color: colorPrimary.withOpacity(0.5)))
+                    ]),
                   ),
                   Spacer(),
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: Image.asset("assets/images/logo.png")
+                  Text(
+                    "\$$price",
+                    style: Theme.of(context)
+                        .textTheme
+                        .button
+                        .copyWith(color: colorPrimary),
                   )
                 ],
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
 
-          // Make a Search Bar
-          Positioned(
-            // Make the component flow in the center-end of Header
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              alignment: Alignment.center, // Make the hint in the middle vertically
-              height: 54,
-              margin: EdgeInsets.symmetric(horizontal: defaultPadding),
-              padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0,10),
-                    blurRadius: 50,
-                    color: colorPrimary.withOpacity(0.3)
-                  )
-                ]
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      onChanged: (value) {},
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        hintStyle: TextStyle(
-                          color: colorPrimary.withOpacity(0.3)
-                        ),
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none
-                      ),
-                    ),
-                  ),
+class ButtonMore extends StatelessWidget {
+  const ButtonMore({
+    Key key,
+    this.title,
+    this.hitButton,
+  }) : super(key: key);
 
-                  SvgPicture.asset("assets/icons/search.svg")
-                ],
-              ),
+  final String title;
+  final Function hitButton;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        children: <Widget>[
+          TitleUnderlined(text: title),
+          Spacer(),
+          FlatButton(
+            color: colorPrimary,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            onPressed: hitButton,
+            child: Text(
+              "See more",
+              style: TextStyle(color: Colors.white),
             ),
           )
         ],
