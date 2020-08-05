@@ -1,6 +1,6 @@
 # plantui
 
-A new Flutter project.
+A Flutter Project to Learn Frontend
 
 ## Getting Started
 
