@@ -1,4 +1,4 @@
-# plantui
+# Plantui
 
 A Flutter Project to Learn Frontend
 
